@@ -1,4 +1,5 @@
 const { GraphQLServer } = require("graphql-yoga");
+const { resolvers } = require('./resolvers');
 
 let links = [
   {
@@ -10,31 +11,6 @@ let links = [
 
 let idCount = links.length;
 
-const resolvers = {
-  Query: {
-    feed: () => links,
-    getPost: (root, { id }) => {
-      let post = links[links.length - id];
-      return post;
-    }
-  },
-  Link: {
-    id: parent => parent.id,
-    description: parent => parent.description,
-    url: parent => parent.url
-  },
-  Mutation: {
-    post: (root, args) => {
-      const link = {
-        id: `lin-${idCount++}`,
-        description: args.description,
-        url: args.url
-      };
-      links.push(link);
-      return link;
-    }
-  }
-};
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
